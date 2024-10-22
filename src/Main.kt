@@ -154,18 +154,26 @@ fun getInput(boardLayout: MutableList<Char>) {
     }
 
     else {
-        print("Where do you want piece ${pieceToMove+1} to go? ")
-        val pieceNewLocation = readln().toInt() -1 // New pos of piece (-1 as index starts at 0 not 1)
 
-        if (boardLayout[pieceNewLocation] != '0') {
-            println("Sorry partner, there is already a piece there!")
+        var validLocationPicked = false
+
+        while (!validLocationPicked) {
+            print("Where do you want piece ${pieceToMove+1} to go? ")
+            val pieceNewLocation = readln().toInt()  -1// New pos of piece (-1 as index starts at 0 not 1)
+
+            if (pieceNewLocation >= pieceToMove) {
+                println("You can only move pieces to the left!")
+            }
+            else if (boardLayout[pieceNewLocation] != '0') {
+                println("There is already a piece there!")
+            }
+            else {
+                validLocationPicked = true
+                boardLayout[pieceNewLocation] = boardLayout[pieceToMove]
+                boardLayout[pieceToMove] = '0'
+            }
         }
-
-        boardLayout[pieceNewLocation] = boardLayout[pieceToMove]
     }
-
-    boardLayout[pieceToMove] = '0'
-
 }
 
 fun switchPlayer() {
