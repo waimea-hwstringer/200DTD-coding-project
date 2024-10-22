@@ -35,11 +35,8 @@ fun main() {
 
     while (!won) {
         showGameBoard(boardLayout) // Displays the current board layout
-
         getInput(boardLayout)
-
         switchPlayer()
-
     }
 
     switchPlayer() //Must switch player back as after input is received player is switched automatically
@@ -133,8 +130,20 @@ fun showGameBoard(boardLayout: MutableList<Char> ) {
 
 fun getInput(boardLayout: MutableList<Char>) {
 
-    print("$currentPlayer's turn: What piece would you like to move? ")
-    val pieceToMove = readln().toInt() -1 // Old pos of piece (-1 as index starts at 0 not 1)
+    var pieceToMove = -1
+    var validPieceToMove = false
+    while (!validPieceToMove) { //Checks that there is a piece when the player tries to move
+
+        print("$currentPlayer's turn: What piece would you like to move? ")
+        pieceToMove = readln().toInt() -1 // Old pos of piece (-1 as index starts at 0 not 1)
+
+        if (boardLayout[pieceToMove] == '0') {
+            println("Sorry, there's no piece there!")
+        }
+        else {
+            validPieceToMove = true
+        }
+    }
 
     if (pieceToMove == 0) {
         println("$currentPlayer removed piece 1!")
@@ -147,6 +156,10 @@ fun getInput(boardLayout: MutableList<Char>) {
     else {
         print("Where do you want piece ${pieceToMove+1} to go? ")
         val pieceNewLocation = readln().toInt() -1 // New pos of piece (-1 as index starts at 0 not 1)
+
+        if (boardLayout[pieceNewLocation] != '0') {
+            println("Sorry partner, there is already a piece there!")
+        }
 
         boardLayout[pieceNewLocation] = boardLayout[pieceToMove]
     }
