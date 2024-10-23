@@ -162,12 +162,20 @@ fun getInput(boardLayout: MutableList<Char>) {
             val pieceNewLocation = readln().toInt()  -1// New pos of piece (-1 as index starts at 0 not 1)
 
             if (pieceNewLocation >= pieceToMove) {
-                println("You can only move pieces to the left!")
+                println("You must move the piece to the left!")
             }
             else if (boardLayout[pieceNewLocation] != '0') {
                 println("There is already a piece there!")
             }
             else {
+                var noJumps = false
+
+                while (noJumps == false) {
+                    if (boardLayout[pieceToMove] != '0') {
+
+                    }
+                }
+
                 validLocationPicked = true
                 boardLayout[pieceNewLocation] = boardLayout[pieceToMove]
                 boardLayout[pieceToMove] = '0'
