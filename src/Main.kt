@@ -50,10 +50,10 @@ fun getStartingInfo(){
     println("===========================================")
 
     print("Howdy there partners! What is your name?, player one? :")
-    name1 = readln()
+    name1 = readln().capitalize()
 
     print("And what is your name, player two? :")
-    name2 = readln()
+    name2 = readln().capitalize()
 
     println("How big do you want the board to be? :")
 
@@ -134,14 +134,19 @@ fun getInput(boardLayout: MutableList<Char>) {
     var validPieceToMove = false
     while (!validPieceToMove) { //Checks that there is a piece when the player tries to move
 
-        print("$currentPlayer's turn: What piece would you like to move? ")
-        pieceToMove = readln().toInt() -1 // Old pos of piece (-1 as index starts at 0 not 1)
+        try {
+            print("$currentPlayer's turn: What piece would you like to move? ")
+            pieceToMove = readln().toInt() - 1 // Old pos of piece (-1 as index starts at 0 not 1)
 
-        if (boardLayout[pieceToMove] == '0') {
-            println("Sorry, there's no piece there!")
+
+            if (boardLayout[pieceToMove] == '0') {
+                println("Sorry, there's no piece there!")
+            } else {
+                validPieceToMove = true
+            }
         }
-        else {
-            validPieceToMove = true
+        catch (e: NumberFormatException) {
+            println("Please enter a number!")
         }
     }
 
@@ -150,6 +155,9 @@ fun getInput(boardLayout: MutableList<Char>) {
 
         if (boardLayout[0] == '$') {
             won = true
+        }
+        else {
+            boardLayout[0] = '0'
         }
     }
 
@@ -169,24 +177,22 @@ fun getInput(boardLayout: MutableList<Char>) {
             }
             else {
 
-                var noJumps = pieceToMove
-
-                while (true){
-                    if (boardLayout[noJumps] == '0')
-                    break
+                var canMoveWithoutJumping = true
+                for (i in (pieceNewLocation + 1)..<pieceToMove) {
+                    if (boardLayout[i] != '0') {  // If any position between new and old isn't empty
+                        canMoveWithoutJumping = false
+                        break
+                    }
                 }
 
-                if (boardLayout[noJumps] == '0') {
-                    println("testing testing")
-                    noJumps -= 1
+                if (!canMoveWithoutJumping) {
+                    println("You cannot jump over other pieces!")
                 }
                 else {
-                    break
+                    validLocationPicked = true
+                    boardLayout[pieceNewLocation] = boardLayout[pieceToMove]
+                    boardLayout[pieceToMove] = '0'
                 }
-
-                validLocationPicked = true
-                boardLayout[pieceNewLocation] = boardLayout[pieceToMove]
-                boardLayout[pieceToMove] = '0'
             }
         }
     }
