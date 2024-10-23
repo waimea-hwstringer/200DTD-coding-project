@@ -168,12 +168,20 @@ fun getInput(boardLayout: MutableList<Char>) {
                 println("There is already a piece there!")
             }
             else {
-                var noJumps = false
 
-                while (noJumps == false) {
-                    if (boardLayout[pieceToMove] != '0') {
+                var noJumps = pieceToMove
 
-                    }
+                while (true){
+                    if (boardLayout[noJumps] == '0')
+                    break
+                }
+
+                if (boardLayout[noJumps] == '0') {
+                    println("testing testing")
+                    noJumps -= 1
+                }
+                else {
+                    break
                 }
 
                 validLocationPicked = true
@@ -186,10 +194,9 @@ fun getInput(boardLayout: MutableList<Char>) {
 
 fun switchPlayer() {
 
-    if (currentPlayer == name1) {
-        currentPlayer = name2
-    }
-    else {
-        currentPlayer = name1
+    currentPlayer = if (currentPlayer == name1) {
+        name2
+    } else {
+        name1
     }
 }
