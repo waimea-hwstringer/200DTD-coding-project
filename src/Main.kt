@@ -30,7 +30,8 @@ fun main() {
 
     var won = false
 
-    getStartingInfo()
+    getStartingInfo() 
+
     var currentPlayer = name1
 
     val boardLayout = generateNewGame() // Starts the game by setting the board layout
@@ -56,7 +57,16 @@ fun getStartingInfo(){
         print("Howdy there partners! Is this your first time playing Old Gold? (Y/N) :")
         val playedBefore = readln().capitalize()
         if (playedBefore == "Y") {
-            println("Here are the rules")
+            print("The aim of the game is to be the player that removes the gold coin, represented by ")
+            println("$".yellow())
+            println("In order to do this, you can move any of the pieces on the board to the left.")
+            println("You can move pieces as far as you like, but pieces can't jump over other pieces.")
+            print("Obstacle pieces are represented by ")
+            println("X".red())
+            println("Once a piece is at the left most position, it can be removed.")
+            println("You'll get the hang of it pretty quick - it's easy to learn, but hard to master.")
+            println("Don't worry, if you make an error I'll correct you.")
+            println("Have fun!")
             break
         }
         else if (playedBefore == "N") {
