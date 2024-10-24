@@ -21,25 +21,28 @@ import kotlin.random.Random
 var name1 = ""
 var name2 = ""
 
-var currentPlayer = ""
 
-var won = false
+var boardSize = 20
 
 fun main() {
 
-    /* 0 = empty | X = stone | $ = gold */
+    /* _ = empty | X = stone | $ = gold */
+
+    var won = false
 
     getStartingInfo()
+    var currentPlayer = name1
 
     val boardLayout = generateNewGame() // Starts the game by setting the board layout
 
     while (!won) {
         showGameBoard(boardLayout) // Displays the current board layout
-        getInput(boardLayout)
-        switchPlayer()
+        won = getInput(boardLayout, currentPlayer)
+        if (!won) {
+            currentPlayer = switchPlayer(currentPlayer)
+        }
     }
 
-    switchPlayer() //Must switch player back as after input is received player is switched automatically
     println("Congrats $currentPlayer, You won!")
 
 }
@@ -49,23 +52,53 @@ fun getStartingInfo(){
     println("            WELCOME TO OLD GOLD")
     println("===========================================")
 
-    print("Howdy there partners! What is your name?, player one? :")
-    name1 = readln()
+    while (true) {
+        print("Howdy there partners! Is this your first time playing Old Gold? (Y/N) :")
+        val playedBefore = readln().capitalize()
+        if (playedBefore == "Y") {
+            println("Here are the rules")
+            break
+        }
+        else if (playedBefore == "N") {
+            println("OK, let's get right into playing!")
+            break
+        }
+        else {
+            println("Please just type 'Y' for yes or 'N' for no")
+        }
+    }
+
+    print("What is your name?, player one? :")
+    name1 = readln().capitalize()
 
     print("And what is your name, player two? :")
-    name2 = readln()
+    name2 = readln().capitalize()
 
-    println("How big do you want the board to be? :")
+    println("How big do you want your board to be? Minimum of 10, Maximum of 30. I recommend 20.")
 
-    return
+    while (true) {
+        try {
+            print("What size do you want? :")
+            boardSize = readln().toInt()
+        } catch (e: Exception) {
+            println("Please enter a number!")
+        }
+        if (boardSize < 10) {
+            println("Sorry, board size can't be less than 10!")
+        }
+        else if (boardSize > 30) {
+            println("Sorry, board size can't be more than 30!")
+        }
+        else {
+            return
+        }
+    }
 
 }
 
 fun generateNewGame(): MutableList<Char> {
 
-    val boardLayout = MutableList(20){'0'}
-
-    currentPlayer = name1
+    val boardLayout = MutableList(boardSize){'_'}
 
     var xNo = 0
     var goldPlaced = false
@@ -73,16 +106,16 @@ fun generateNewGame(): MutableList<Char> {
 
 
     while (xNo < 5) {
-        val index = Random.nextInt(20)
-        if(boardLayout[index] == '0') {
+        val index = Random.nextInt(boardSize)
+        if(boardLayout[index] == '_') {
             boardLayout[index] = 'X'
             xNo++
         }
     }
 
     while (!goldPlaced) {
-        val index = Random.nextInt(20)
-        if(boardLayout[index] == '0') {
+        val index = Random.nextInt(boardSize)
+        if(boardLayout[index] == '_') {
             boardLayout[index] = '$'
             goldPlaced = true
         }
@@ -95,7 +128,7 @@ fun showGameBoard(boardLayout: MutableList<Char> ) {
 
     //Build the top line
     var x = 1
-    print("╤════".repeat(boardLayout.size))
+    print("╤════".repeat(boardSize))
     println("╤")
 
     //Show the index number
@@ -106,7 +139,7 @@ fun showGameBoard(boardLayout: MutableList<Char> ) {
     println("│")
 
     //Build the middle line
-    print("╪════".repeat(boardLayout.size))
+    print("╪════".repeat(boardSize))
     println("╪")
 
     //Show the pieces on the board
@@ -124,35 +157,45 @@ fun showGameBoard(boardLayout: MutableList<Char> ) {
     println("│")
 
     //Build the bottom line
-    print("╧════".repeat(boardLayout.size))
+    print("╧════".repeat(boardSize))
     println("╧")
 }
 
-fun getInput(boardLayout: MutableList<Char>) {
+fun getInput(boardLayout: MutableList<Char>, currentPlayer: String): Boolean {
 
     var pieceToMove = -1
     var validPieceToMove = false
     while (!validPieceToMove) { //Checks that there is a piece when the player tries to move
 
-        print("$currentPlayer's turn: What piece would you like to move? ")
-        pieceToMove = readln().toInt() -1 // Old pos of piece (-1 as index starts at 0 not 1)
+        try { //Guarantees that the player inputs a number
+            print("$currentPlayer's turn: What piece would you like to move? ")
+            pieceToMove = readln().toInt() - 1 // Old pos of piece (-1 as index starts at 0 not 1)
 
-        if (boardLayout[pieceToMove] == '0') {
-            println("Sorry, there's no piece there!")
+
+            if (boardLayout[pieceToMove] == '_') {
+                println("Sorry, there's no piece there!")
+            } else {
+                validPieceToMove = true
+            }
         }
-        else {
-            validPieceToMove = true
+        catch (e: NumberFormatException) {
+            println("Please enter a number!")
         }
     }
 
+    //If player is removing a piece
     if (pieceToMove == 0) {
         println("$currentPlayer removed piece 1!")
 
         if (boardLayout[0] == '$') {
-            won = true
+            return true
+        }
+        else {
+            boardLayout[0] = '_'
         }
     }
 
+    //If player is moving a piece
     else {
 
         var validLocationPicked = false
@@ -164,37 +207,39 @@ fun getInput(boardLayout: MutableList<Char>) {
             if (pieceNewLocation >= pieceToMove) {
                 println("You must move the piece to the left!")
             }
-            else if (boardLayout[pieceNewLocation] != '0') {
+            else if (boardLayout[pieceNewLocation] != '_') {
                 println("There is already a piece there!")
             }
             else {
-
-                var noJumps = pieceToMove
-
-                while (true){
-                    if (boardLayout[noJumps] == '0')
-                    break
+                //Checks that there are no Xs blocking the path
+                var canMoveWithoutJumping = true
+                for (i in (pieceNewLocation + 1)..<pieceToMove) {
+                    if (boardLayout[i] != '_') {  // If any position between new and old isn't empty
+                        canMoveWithoutJumping = false
+                        break
+                    }
                 }
 
-                if (boardLayout[noJumps] == '0') {
-                    println("testing testing")
-                    noJumps -= 1
+                if (!canMoveWithoutJumping) {
+                    println("You cannot jump over other pieces!")
                 }
                 else {
-                    break
-                }
+                    validLocationPicked = true
+                    boardLayout[pieceNewLocation] = boardLayout[pieceToMove]
+                    boardLayout[pieceToMove] = '_'
 
-                validLocationPicked = true
-                boardLayout[pieceNewLocation] = boardLayout[pieceToMove]
-                boardLayout[pieceToMove] = '0'
+                }
             }
         }
     }
+
+    return false
+
 }
 
-fun switchPlayer() {
+fun switchPlayer(currentPlayer: String):String {
 
-    currentPlayer = if (currentPlayer == name1) {
+    return if (currentPlayer == name1) {
         name2
     } else {
         name1
