@@ -78,11 +78,24 @@ fun getStartingInfo(){
         }
     }
 
-    print("What is your name?, player one? :")
-    name1 = readln().capitalize()
+    while (true) {
+        print("What is your name?, player one? :")
+        name1 = readln().capitalize()
+        if (name1 == "") {
+            println("Your name can't be empty!")
+        } else {break}
+    }
 
-    print("And what is your name, player two? :")
-    name2 = readln().capitalize()
+    while (true) {
+        print("And what is your name, player two? :")
+        name2 = readln().capitalize()
+        if (name2 == "") {
+        println("Your name can't be empty!")
+        }
+        else if (name2 == name1) {
+            println("You can't both have the same name!")
+        } else {break}
+    }
 
     println("How big do you want your board to be? Minimum of 10, Maximum of 30. I recommend 20.")
 
@@ -91,19 +104,11 @@ fun getStartingInfo(){
             print("What size do you want? :")
             boardSize = readln().toInt()
         } catch (e: Exception) {
-            println("Please enter a number!")
+            println("Please enter a valid number!")
+            continue
         }
-        if (boardSize < 10) {
-            println("Sorry, board size can't be less than 10!")
-        }
-        else if (boardSize > 30) {
-            println("Sorry, board size can't be more than 30!")
-        }
-        else {
-            return
-        }
+        return
     }
-
 }
 
 fun generateNewGame(): MutableList<Char> {
@@ -112,8 +117,6 @@ fun generateNewGame(): MutableList<Char> {
 
     var xNo = 0
     var goldPlaced = false
-
-
 
     while (xNo < 5) {
         val index = Random.nextInt(boardSize)
@@ -198,7 +201,7 @@ fun getInput(boardLayout: MutableList<Char>, currentPlayer: String): Boolean {
         println("$currentPlayer removed piece 1!")
 
         if (boardLayout[0] == '$') {
-            return true
+            return true// Sets won to true
         }
         else {
             boardLayout[0] = '_'
@@ -229,7 +232,6 @@ fun getInput(boardLayout: MutableList<Char>, currentPlayer: String): Boolean {
                         break
                     }
                 }
-
                 if (!canMoveWithoutJumping) {
                     println("You cannot jump over other pieces!")
                 }
@@ -243,7 +245,7 @@ fun getInput(boardLayout: MutableList<Char>, currentPlayer: String): Boolean {
         }
     }
 
-    return false
+    return false//didn't win, so won is false
 
 }
 
