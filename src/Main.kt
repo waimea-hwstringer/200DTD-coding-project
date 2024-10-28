@@ -195,7 +195,11 @@ fun getInput(boardLayout: MutableList<Char>, currentPlayer: String): Boolean {
 
             if (boardLayout[pieceToMove] == '_') {
                 println("Sorry, there's no piece there!")
-            } else {
+            }
+            else if ( pieceToMove != 0 && boardLayout[pieceToMove-1] != '_' ) {
+                println("That piece has no valid moves!")
+            }
+            else {
                 validPieceToMove = true
             }
         }
