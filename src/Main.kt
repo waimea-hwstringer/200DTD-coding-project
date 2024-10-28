@@ -107,6 +107,14 @@ fun getStartingInfo(){
             println("Please enter a valid number!")
             continue
         }
+        if (boardSize > 30) {
+            println("The board cannot be longer than 30!")
+            continue
+        }
+        else if (boardSize < 10) {
+            println("The board cannot be smaller than 10")
+            continue
+        }
         return
     }
 }
