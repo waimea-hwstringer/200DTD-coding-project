@@ -193,8 +193,8 @@ fun getInput(boardLayout: MutableList<Char>, currentPlayer: String): Boolean {
             pieceToMove = readln().toInt() - 1 // Old pos of piece (-1 as index starts at 0 not 1)
 
 
-            if (pieceToMove > boardSize) {
-                println("nope")
+            if (pieceToMove >= boardSize || pieceToMove < 0) {
+                println("That piece doesn't exist!")
             }
             else if (boardLayout[pieceToMove] == '_') {
                 println("Sorry, there's no piece there!")
