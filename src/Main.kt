@@ -107,6 +107,14 @@ fun getStartingInfo(){
             println("Please enter a valid number!")
             continue
         }
+        if (boardSize > 30) {
+            println("The board cannot be longer than 30!")
+            continue
+        }
+        else if (boardSize < 10) {
+            println("The board cannot be smaller than 10")
+            continue
+        }
         return
     }
 }
@@ -185,9 +193,16 @@ fun getInput(boardLayout: MutableList<Char>, currentPlayer: String): Boolean {
             pieceToMove = readln().toInt() - 1 // Old pos of piece (-1 as index starts at 0 not 1)
 
 
-            if (boardLayout[pieceToMove] == '_') {
+            if (pieceToMove >= boardSize || pieceToMove < 0) {
+                println("That piece doesn't exist!")
+            }
+            else if (boardLayout[pieceToMove] == '_') {
                 println("Sorry, there's no piece there!")
-            } else {
+            }
+            else if ( pieceToMove != 0 && boardLayout[pieceToMove-1] != '_' ) {
+                println("That piece has no valid moves!")
+            }
+            else {
                 validPieceToMove = true
             }
         }
@@ -217,7 +232,7 @@ fun getInput(boardLayout: MutableList<Char>, currentPlayer: String): Boolean {
             print("Where do you want piece ${pieceToMove+1} to go? ")
             val pieceNewLocation = readln().toInt()  -1// New pos of piece (-1 as index starts at 0 not 1)
 
-            if (pieceNewLocation >= pieceToMove) {
+            if (pieceNewLocation >= pieceToMove || pieceNewLocation < 0) {
                 println("You must move the piece to the left!")
             }
             else if (boardLayout[pieceNewLocation] != '_') {
