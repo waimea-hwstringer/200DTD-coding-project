@@ -232,7 +232,7 @@ fun getInput(boardLayout: MutableList<Char>, currentPlayer: String): Boolean {
             print("Where do you want piece ${pieceToMove+1} to go? ")
             val pieceNewLocation = readln().toInt()  -1// New pos of piece (-1 as index starts at 0 not 1)
 
-            if (pieceNewLocation >= pieceToMove) {
+            if (pieceNewLocation >= pieceToMove || pieceNewLocation < 0) {
                 println("You must move the piece to the left!")
             }
             else if (boardLayout[pieceNewLocation] != '_') {
