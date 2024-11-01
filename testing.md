@@ -148,18 +148,6 @@ If a valid location is chosen, the selected piece should move to the new locatio
 Otherwise, the program will state what went wrong and repeat the question
 
 
-### TEST NAME HERE
-
-TEST DESCRIPTION HERE
-
-#### Test Data / Actions to Use
-
-TEST DATA TO USE DETAILED HERE
-
-#### Expected Outcome
-
-EXPECTED OUTCOME DETAILED HERE
-
 ---
 
 
@@ -236,12 +224,4 @@ As seen in the video above, the player cannot:
 
 This all works as intended, with the player only being able to make moves that follow the rules.
 
-
-### TEST NAME HERE
-
-ACTUAL RESULTS OF TESTING SHOWN HERE
-
-![](images/placeholder.jpg)
-
-NOTES REGARDING THE RESULTS HERE
 
