@@ -1,4 +1,4 @@
-# PROJECT NAME HERE
+# OLD GOLD
 
 ### Level 2 Programming Project by HARRY STRINGER
 
